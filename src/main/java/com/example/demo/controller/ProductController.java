@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.Message;
 import com.example.demo.model.Product;
-import com.example.demo.repo.ProductRepo;
-import org.springframework.http.HttpStatus;
+import com.example.demo.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +14,27 @@ import java.util.Optional;
 @RequestMapping("api/v1/product/")
 @CrossOrigin("*")
 public class ProductController {
-    private ProductRepo productRepo;
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("{id}")
-    public ResponseEntity<Optional<Product>> getProductById(@PathVariable("id") Long id){
-      return   ResponseEntity.ok(productRepo.findById(id));
+    public ResponseEntity<Optional<Product>> getProductById(@PathVariable("id") Long id) {
+        return productService.getProductById(id);
     }
-    @GetMapping("")
-    public ResponseEntity<List<Product>> getAllProducts(){
-        return ResponseEntity.ok(productRepo.findAll());
+
+    @GetMapping("all")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return productService.getAllProducts();
     }
-    @PostMapping("")
-    public ResponseEntity<Product> addProduct(Product product){
-        return ResponseEntity.status(HttpStatus.CREATED).body(productRepo.save(product));
+
+    @PostMapping(value = {"add","update"})
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        return productService.addProduct(product);
     }
+    @DeleteMapping("{id}")
+    public ResponseEntity<Message>deleteProductById(@PathVariable Long id)
+    {
+        return productService.deleteProductById(id);
+    }
+
 }

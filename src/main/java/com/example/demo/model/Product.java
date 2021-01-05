@@ -1,11 +1,8 @@
 package com.example.demo.model;
 
 import lombok.*;
-import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -14,10 +11,11 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
-  @Id
-  @GeneratedValue
-  private  Long id;
-  private String name;
-  private  Float price;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+    private String name;
+    @Column(columnDefinition ="FLOAT (20,2)  DEFAULT 0.0" )
+    private Float price;
 
 }
